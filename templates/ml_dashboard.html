@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ML Analytics | PhishGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<nav class="dashboard-nav">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡
+        </div>
+
+        <div>
+
+            <h2>
+                PhishGuard
+            </h2>
+
+            <span>
+                ML Analytics
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-links">
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('home') }}">
+            Scanner
+        </a>
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="dashboard-container">
+
+
+<div class="dashboard-heading">
+
+    <div>
+
+        <span class="mini-label">
+            MACHINE LEARNING
+        </span>
+
+        <h1>
+            Model Analytics
+        </h1>
+
+        <p>
+            Performance comparison of phishing detection models.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- BEST MODEL -->
+
+<div class="best-model">
+
+    <div class="best-icon">
+        🏆
+    </div>
+
+    <div>
+
+        <span>
+            BEST PERFORMING MODEL
+        </span>
+
+        <strong>
+            {{ best_model }}
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- MODEL TABLE -->
+
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <span class="mini-label">
+                MODEL COMPARISON
+            </span>
+
+            <h2>
+                Performance Metrics
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="model-table">
+
+        <div class="model-header">
+
+            <span>
+                MODEL
+            </span>
+
+            <span>
+                ACCURACY
+            </span>
+
+            <span>
+                PRECISION
+            </span>
+
+            <span>
+                RECALL
+            </span>
+
+            <span>
+                F1 SCORE
+            </span>
+
+            <span>
+                ROC-AUC
+            </span>
+
+        </div>
+
+
+        {% for name, metrics in results.items() %}
+
+        <div class="model-row">
+
+            <strong>
+                {{ name }}
+            </strong>
+
+            <span>
+                {{ metrics.accuracy }}%
+            </span>
+
+            <span>
+                {{ metrics.precision }}%
+            </span>
+
+            <span>
+                {{ metrics.recall }}%
+            </span>
+
+            <span>
+                {{ metrics.f1 }}%
+            </span>
+
+            <span>
+                {{ metrics.roc_auc }}%
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<!-- EXPLANATION -->
+
+<div class="ml-info-grid">
+
+
+    <div class="ml-info-card">
+
+        <div>
+            🎯
+        </div>
+
+        <h3>
+            Accuracy
+        </h3>
+
+        <p>
+            Percentage of URLs correctly classified
+            as safe or phishing.
+        </p>
+
+    </div>
+
+
+    <div class="ml-info-card">
+
+        <div>
+            🔎
+        </div>
+
+        <h3>
+            Precision
+        </h3>
+
+        <p>
+            Measures how many URLs classified as
+            phishing were actually phishing.
+        </p>
+
+    </div>
+
+
+    <div class="ml-info-card">
+
+        <div>
+            🛡
+        </div>
+
+        <h3>
+            Recall
+        </h3>
+
+        <p>
+            Measures how many actual phishing URLs
+            were successfully detected.
+        </p>
+
+    </div>
+
+
+    <div class="ml-info-card">
+
+        <div>
+            📊
+        </div>
+
+        <h3>
+            F1 Score
+        </h3>
+
+        <p>
+            Combines precision and recall into
+            a balanced performance measure.
+        </p>
+
+    </div>
+
+
+</div>
+
+
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PhishGuard | URL Security Scanner</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="background">
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="grid"></div>
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡
+        </div>
+
+        <div>
+            <h2>PhishGuard</h2>
+            <span>URL Security Intelligence</span>
+        </div>
+
+    </div>
+
+    <div class="nav-status">
+        <span class="status-dot"></span>
+        Scanner Online
+    </div>
+
+</nav>
+
+
+<main class="main-container">
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        ✦ AI-POWERED THREAT DETECTION
+    </div>
+
+    <h1>
+        Detect malicious URLs
+        <span>before they reach you.</span>
+    </h1>
+
+    <p>
+        Analyze suspicious links using machine learning
+        and advanced URL security analysis.
+    </p>
+
+</section>
+
+
+<!-- SCANNER -->
+
+<section class="scanner-card">
+
+    <div class="scanner-header">
+
+        <div>
+
+            <div class="scanner-title">
+                <span class="scanner-icon">◉</span>
+                URL Threat Scanner
+            </div>
+
+            <p>
+                Enter a URL to analyze its security risk.
+            </p>
+
+        </div>
+
+        <div class="secure-badge">
+            🔒 Safe Analysis
+        </div>
+
+    </div>
+
+
+    <div class="input-wrapper">
+
+        <span class="url-icon">
+            🔗
+        </span>
+
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="https://example.com"
+            autocomplete="off"
+        >
+
+        <button
+            id="scanButton"
+            onclick="scanURL()">
+
+            <span id="buttonText">
+                Scan URL
+            </span>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <div class="examples">
+
+        <span>Try an example:</span>
+
+        <button onclick="setExample('https://www.google.com')">
+            Google
+        </button>
+
+        <button onclick="setExample('http://secure-bank-login-example.com/verify')">
+            Phishing Example
+        </button>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div id="loading" class="loading hidden">
+
+        <div class="loader"></div>
+
+        <div>
+            <strong>Analyzing URL</strong>
+            <span>Extracting security features...</span>
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div id="result" class="result hidden">
+
+        <div class="result-top">
+
+            <div class="result-status">
+
+                <div id="resultIcon"
+                     class="result-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <div class="result-label">
+                        SCAN RESULT
+                    </div>
+
+                    <h2 id="resultTitle">
+                        URL Appears Safe
+                    </h2>
+
+                    <p id="resultMessage">
+                        No strong phishing characteristics detected.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="risk-score">
+
+                <div class="score-ring">
+
+                    <span id="scoreNumber">
+                        0
+                    </span>
+
+                    <small>
+                        /100
+                    </small>
+
+                </div>
+
+                <span>
+                    Risk Score
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROBABILITY -->
+
+        <div class="risk-bar-container">
+
+            <div class="risk-header">
+
+                <span>
+                    Phishing Probability
+                </span>
+
+                <strong id="probability">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="risk-bar">
+
+                <div id="progressBar"
+                     class="risk-progress">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SCANNED URL -->
+
+        <div class="scanned-url">
+
+            <div class="url-label">
+                SCANNED URL
+            </div>
+
+            <div id="scannedURL">
+                -
+            </div>
+
+        </div>
+
+
+        <!-- ADVANCED ANALYSIS -->
+
+        <div id="analysisDetails"
+             class="analysis-details">
+
+            <div class="analysis-title">
+
+                <span>
+                    SECURITY ANALYSIS
+                </span>
+
+                <strong>
+                    Detailed URL inspection
+                </strong>
+
+            </div>
+
+
+            <div class="analysis-grid">
+
+                <div class="analysis-item">
+
+                    <span>
+                        Protocol
+                    </span>
+
+                    <strong id="analysisProtocol">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        IP Address
+                    </span>
+
+                    <strong id="analysisIP">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        URL Length
+                    </span>
+
+                    <strong id="analysisLength">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        Subdomains
+                    </span>
+
+                    <strong id="analysisSubdomains">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        Suspicious Words
+                    </span>
+
+                    <strong id="analysisKeywords">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        Special Characters
+                    </span>
+
+                    <strong id="analysisSpecial">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        URL Entropy
+                    </span>
+
+                    <strong id="analysisEntropy">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    <span>
+                        Path Depth
+                    </span>
+
+                    <strong id="analysisPath">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="indicators-title">
+                DETECTED INDICATORS
+            </div>
+
+
+            <div id="indicators"
+                 class="indicators">
+
+                <div class="clean-indicator">
+                    ✓ Waiting for scan...
+                </div>
+
+            </div>
+
+        </div>
+
+<!-- DOMAIN INTELLIGENCE -->
+
+<div class="domain-intelligence">
+
+    <div class="analysis-title">
+
+        <span>
+            DOMAIN INTELLIGENCE
+        </span>
+
+        <strong>
+            DNS and domain information
+        </strong>
+
+    </div>
+
+
+    <div class="domain-grid">
+
+        <div class="domain-item">
+
+            <span>
+                DOMAIN
+            </span>
+
+            <strong id="domainName">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="domain-item">
+
+            <span>
+                IP ADDRESS
+            </span>
+
+            <strong id="domainIP">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="domain-item">
+
+            <span>
+                DNS STATUS
+            </span>
+
+            <strong id="dnsStatus">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="domain-item">
+
+            <span>
+                NAMESERVER
+            </span>
+
+            <strong id="nsStatus">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="domain-item">
+
+            <span>
+                MAIL SERVER
+            </span>
+
+            <strong id="mxStatus">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- SSL -->
+
+    <div class="ssl-section">
+
+        <div class="ssl-heading">
+
+            <span>
+                🔐 SSL / TLS ANALYSIS
+            </span>
+
+        </div>
+
+
+        <div class="ssl-grid">
+
+            <div class="domain-item">
+
+                <span>
+                    HTTPS
+                </span>
+
+                <strong id="sslHTTPS">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="domain-item">
+
+                <span>
+                    CERTIFICATE
+                </span>
+
+                <strong id="sslCertificate">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="domain-item">
+
+                <span>
+                    TLS VERSION
+                </span>
+
+                <strong id="tlsVersion">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="domain-item">
+
+                <span>
+                    ISSUER
+                </span>
+
+                <strong id="sslIssuer">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="domain-item">
+
+                <span>
+                    EXPIRATION
+                </span>
+
+                <strong id="sslExpiry">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     ADVANCED SECURITY ANALYSIS
+     ===================================================== -->
+
+<div class="advanced-security" id="advancedSecurity">
+
+    <div class="analysis-title">
+
+        <span>
+            ADVANCED SECURITY ANALYSIS
+        </span>
+
+        <strong>
+            Additional threat indicators
+        </strong>
+
+    </div>
+
+
+    <div class="advanced-grid">
+
+        <div class="advanced-item">
+
+            <span>
+                TLD
+            </span>
+
+            <strong id="advancedTLD">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                IP BASED
+            </span>
+
+            <strong id="advancedIP">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                SUBDOMAINS
+            </span>
+
+            <strong id="advancedSubdomains">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                KEYWORDS
+            </span>
+
+            <strong id="advancedKeywords">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                @ SYMBOL
+            </span>
+
+            <strong id="advancedAt">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                ENCODED CHARACTERS
+            </span>
+
+            <strong id="advancedEncoded">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                HYPHENS
+            </span>
+
+            <strong id="advancedHyphens">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="advanced-item">
+
+            <span>
+                DIGITS
+            </span>
+
+            <strong id="advancedDigits">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="risk-indicators">
+
+        <div class="indicator-heading">
+
+            DETECTED RISK INDICATORS
+
+        </div>
+
+
+        <div id="advancedRiskPoints">
+
+            No indicators detected.
+
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- INFORMATION -->
+
+        <div class="result-note">
+
+            <span>ⓘ</span>
+
+            This scanner analyzes the URL structure
+            without visiting the destination website.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="mini-label">
+                SECURITY ENGINE
+            </span>
+
+            <h2>
+                How PhishGuard analyzes URLs
+            </h2>
+
+        </div>
+
+        <p>
+            Multiple security signals are combined
+            with machine learning to generate the final
+            risk assessment.
+        </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+        <div class="feature-card">
+
+            <div class="feature-icon blue">
+                ⌁
+            </div>
+
+            <h3>
+                URL Structure
+            </h3>
+
+            <p>
+                Examines URL length, characters,
+                paths, parameters and unusual patterns.
+            </p>
+
+            <div class="feature-number">
+                01
+            </div>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon purple">
+                ◈
+            </div>
+
+            <h3>
+                Machine Learning
+            </h3>
+
+            <p>
+                Random Forest evaluates extracted
+                URL characteristics.
+            </p>
+
+            <div class="feature-number">
+                02
+            </div>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon green">
+                ✓
+            </div>
+
+            <h3>
+                Threat Signals
+            </h3>
+
+            <p>
+                Detects suspicious words, IP addresses,
+                subdomains and other indicators.
+            </p>
+
+            <div class="feature-number">
+                03
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+    <div class="stat">
+        <strong>20+</strong>
+        <span>URL Features</span>
+    </div>
+
+    <div class="stat-divider"></div>
+
+    <div class="stat">
+        <strong>ML</strong>
+        <span>Random Forest</span>
+    </div>
+
+    <div class="stat-divider"></div>
+
+    <div class="stat">
+        <strong>0</strong>
+        <span>Websites Visited</span>
+    </div>
+
+    <div class="stat-divider"></div>
+
+    <div class="stat">
+        <strong>24/7</strong>
+        <span>Local Scanner</span>
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div class="footer-brand">
+        🛡 PhishGuard
+    </div>
+
+    <p>
+        Machine Learning Based URL Phishing Detection
+    </p>
+
+    <span>
+        Cybersecurity Project • 2026
+    </span>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+
+</body>
+
+</html>

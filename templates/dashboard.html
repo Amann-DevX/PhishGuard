@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | PhishGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<nav class="dashboard-nav">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡
+        </div>
+
+        <div>
+
+            <h2>
+                PhishGuard
+            </h2>
+
+            <span>
+                Security Dashboard
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-links">
+
+        <a href="{{ url_for('home') }}">
+            Scanner
+        </a>
+
+        <a href="{{ url_for('history') }}">
+            History
+        </a>
+
+        <a href="{{ url_for('ml_analytics') }}">
+            ML Analytics
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="dashboard-container">
+
+
+<div class="dashboard-heading">
+
+    <div>
+
+        <span class="mini-label">
+            SECURITY CENTER
+        </span>
+
+        <h1>
+            Welcome, {{ session.username }}
+        </h1>
+
+        <p>
+            Monitor your URL security activity.
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('home') }}"
+        class="scan-new-button">
+
+        + Scan New URL
+
+    </a>
+
+</div>
+
+
+<!-- STAT CARDS -->
+
+<div class="dashboard-stats">
+
+
+    <div class="dashboard-stat">
+
+        <span>
+            TOTAL SCANS
+        </span>
+
+        <strong>
+            {{ total }}
+        </strong>
+
+        <small>
+            All analyzed URLs
+        </small>
+
+    </div>
+
+
+    <div class="dashboard-stat safe-stat">
+
+        <span>
+            SAFE
+        </span>
+
+        <strong>
+            {{ safe }}
+        </strong>
+
+        <small>
+            Low-risk URLs
+        </small>
+
+    </div>
+
+
+    <div class="dashboard-stat warning-stat">
+
+        <span>
+            SUSPICIOUS
+        </span>
+
+        <strong>
+            {{ suspicious }}
+        </strong>
+
+        <small>
+            Require caution
+        </small>
+
+    </div>
+
+
+    <div class="dashboard-stat danger-stat">
+
+        <span>
+            PHISHING
+        </span>
+
+        <strong>
+            {{ phishing }}
+        </strong>
+
+        <small>
+            High-risk URLs
+        </small>
+
+    </div>
+
+
+</div>
+
+
+<!-- RECENT SCANS -->
+
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <span class="mini-label">
+                ACTIVITY
+            </span>
+
+            <h2>
+                Recent Scans
+            </h2>
+
+        </div>
+
+
+        <a href="{{ url_for('history') }}">
+            View All →
+        </a>
+
+    </div>
+
+
+    {% if recent_scans %}
+
+
+        <div class="scan-table">
+
+
+            {% for scan in recent_scans %}
+
+            <div class="scan-row">
+
+                <div class="scan-url">
+
+                    <span>
+                        🔗
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ scan['url'] }}
+                        </strong>
+
+                        <small>
+                            {{ scan['created_at'] }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="scan-score">
+
+                    {{ scan['risk_score'] }}/100
+
+                </div>
+
+
+                <div>
+
+                    {% if scan['result'] == 'Phishing' %}
+
+                        <span class="result-badge phishing">
+                            🔴 Phishing
+                        </span>
+
+                    {% elif scan['result'] == 'Suspicious' %}
+
+                        <span class="result-badge suspicious">
+                            🟠 Suspicious
+                        </span>
+
+                    {% else %}
+
+                        <span class="result-badge safe">
+                            🟢 Safe
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div>
+                🔍
+            </div>
+
+            <h3>
+                No scans yet
+            </h3>
+
+            <p>
+                Scan your first URL to see it here.
+            </p>
+
+            <a
+                href="{{ url_for('home') }}"
+                class="scan-new-button">
+
+                Scan URL
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+</main>
+
+
+</body>
+
+</html>

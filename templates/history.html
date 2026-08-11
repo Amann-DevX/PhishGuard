@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Scan History | PhishGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<nav class="dashboard-nav">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡
+        </div>
+
+        <div>
+
+            <h2>
+                PhishGuard
+            </h2>
+
+            <span>
+                Security Dashboard
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-links">
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('home') }}">
+            Scanner
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="dashboard-container">
+
+
+<div class="dashboard-heading">
+
+    <div>
+
+        <span class="mini-label">
+            SECURITY ACTIVITY
+        </span>
+
+        <h1>
+            Scan History
+        </h1>
+
+        <p>
+            Review all URLs analyzed by your account.
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('home') }}"
+        class="scan-new-button">
+
+        + Scan New URL
+
+    </a>
+
+</div>
+
+
+<div class="history-panel">
+
+
+{% if scans %}
+
+
+    {% for scan in scans %}
+
+
+    <div class="history-row">
+
+
+        <div class="history-number">
+
+            #{{ loop.index }}
+
+        </div>
+
+
+        <div class="history-url">
+
+            <strong>
+                {{ scan['url'] }}
+            </strong>
+
+            <small>
+                {{ scan['created_at'] }}
+            </small>
+
+        </div>
+
+
+        <div class="history-risk">
+
+            <strong>
+                {{ scan['risk_score'] }}/100
+            </strong>
+
+            <small>
+                Risk Score
+            </small>
+
+        </div>
+
+
+        <div>
+
+            {% if scan['result'] == 'Phishing' %}
+
+                <span class="result-badge phishing">
+                    🔴 Phishing
+                </span>
+
+            {% elif scan['result'] == 'Suspicious' %}
+
+                <span class="result-badge suspicious">
+                    🟠 Suspicious
+                </span>
+
+            {% else %}
+
+                <span class="result-badge safe">
+                    🟢 Safe
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'delete_scan',
+                scan_id=scan['id']
+            ) }}"
+        >
+
+            <button
+                type="submit"
+                class="delete-button"
+                onclick="return confirm('Delete this scan?');">
+
+                ×
+
+            </button>
+
+        </form>
+
+
+    </div>
+
+
+    {% endfor %}
+
+
+{% else %}
+
+
+    <div class="empty-state">
+
+        <div>
+            🕘
+        </div>
+
+        <h3>
+            Your history is empty
+        </h3>
+
+        <p>
+            Scanned URLs will appear here.
+        </p>
+
+    </div>
+
+
+{% endif %}
+
+
+</div>
+
+
+</main>
+
+
+</body>
+
+</html>

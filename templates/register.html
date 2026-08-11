@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | PhishGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="auth-page">
+
+<div class="auth-background"></div>
+
+
+<div class="auth-card">
+
+    <div class="auth-logo">
+        🛡
+    </div>
+
+    <h1>
+        Create Account
+    </h1>
+
+    <p>
+        Start protecting your digital environment.
+    </p>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <form method="POST">
+
+        <label>
+            Username
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Your username"
+            minlength="3"
+            required
+        >
+
+
+        <label>
+            Email
+        </label>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Minimum 6 characters"
+            minlength="6"
+            required
+        >
+
+
+        <button
+            type="submit"
+            class="auth-button">
+
+            Create Account →
+
+        </button>
+
+    </form>
+
+
+    <div class="auth-footer">
+
+        Already have an account?
+
+        <a href="{{ url_for('login') }}">
+            Login
+        </a>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('home') }}"
+        class="back-home">
+
+        ← Back to PhishGuard
+
+    </a>
+
+</div>
+
+
+</body>
+
+</html>
