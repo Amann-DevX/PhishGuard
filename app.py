@@ -1176,7 +1176,17 @@ def logout():
     return redirect(
         url_for("home")
     )
+# ============================================================
+# URL SCANNER
+# ============================================================
 
+@app.route("/scanner")
+@login_required
+def scanner():
+
+    return render_template(
+        "index.html"
+    )
 
 # ============================================================
 # DASHBOARD
