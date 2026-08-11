@@ -917,8 +917,13 @@ def predict_url(url):
 @app.route("/")
 def home():
 
-    return render_template(
-        "index.html"
+    if "user_id" in session:
+        return redirect(
+            url_for("dashboard")
+        )
+
+    return redirect(
+        url_for("login")
     )
 
 
